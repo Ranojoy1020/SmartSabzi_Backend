@@ -6,6 +6,7 @@ import com.rbanerjee.SmartSabzi.DTO.SignupRequest;
 import com.rbanerjee.SmartSabzi.Entity.Vendor;
 import com.rbanerjee.SmartSabzi.Service.AuthService;
 import com.rbanerjee.SmartSabzi.Service.JwtService;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +27,7 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<Vendor> signup(@RequestBody SignupRequest signupRequest){
         Vendor vendor = authService.signUp(signupRequest);
-        return ResponseEntity.ok(vendor);
+        return new ResponseEntity<>(vendor, HttpStatusCode.valueOf(201));
     }
 
     @PostMapping("/login")
