@@ -2,11 +2,10 @@ package com.rbanerjee.SmartSabzi.Entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.UuidGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -21,7 +20,8 @@ public class Vendor implements UserDetails {
 
     @Id
     @Column
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
+    @UuidGenerator
     private UUID vendorId;
 
     @Email
@@ -41,6 +41,12 @@ public class Vendor implements UserDetails {
     @Column
     @UpdateTimestamp
     private Instant updatedAt;
+
+    @OneToMany(mappedBy = "vendor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Sale> saleList;
+
+    @OneToMany(mappedBy = "vendor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<VendorVegetable> vendorVegetableList;
 
     @Override
     public String getUsername() {

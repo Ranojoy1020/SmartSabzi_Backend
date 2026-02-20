@@ -6,27 +6,32 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Data
-public class Vegetable {
+public class Price {
 
     @Id
     @Column
-    @NotNull
     @GeneratedValue
     @UuidGenerator
-    private UUID vegetableId;
+    private UUID priceId;
 
-    @Column(unique = true, nullable = false)
     @NotNull
-    private String vegetableName;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "vendor_vegetable", nullable = false)
+    private VendorVegetable vendorVegetable;
 
-    @OneToMany(mappedBy = "vegetable", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<VendorVegetable> vendorVegetableList;
+    @Column
+    @NotNull
+    private BigDecimal pricePerKg;
+
+    @Column
+    @NotNull
+    private Instant effectiveFrom;
 
     @Column(updatable = false)
     @CreationTimestamp

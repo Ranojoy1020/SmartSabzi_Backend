@@ -1,34 +1,35 @@
 package com.rbanerjee.SmartSabzi.Entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Data
-public class Vegetable {
-
+public class Sale {
     @Id
     @Column
-    @NotNull
     @GeneratedValue
     @UuidGenerator
-    private UUID vegetableId;
+    private UUID saleId;
 
-    @Column(unique = true, nullable = false)
-    @NotNull
-    private String vegetableName;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "vendor_id", nullable = false)
+    private Vendor vendor;
 
-    @OneToMany(mappedBy = "vegetable", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<VendorVegetable> vendorVegetableList;
+    @Column
+    private BigDecimal totalAmount;
 
     @Column(updatable = false)
     @CreationTimestamp
     private Instant createdAt;
+
+    @OneToMany(mappedBy = "sale")
+    private List<SaleItem> saleItemList;
 }
