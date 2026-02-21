@@ -16,7 +16,6 @@ public class Vegetable {
 
     @Id
     @Column
-    @NotNull
     @GeneratedValue
     @UuidGenerator
     private UUID vegetableId;
@@ -25,7 +24,7 @@ public class Vegetable {
     @NotNull
     private String vegetableName;
 
-    @OneToMany(mappedBy = "vegetable", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "vegetable", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<VendorVegetable> vendorVegetableList;
 
     @Column(updatable = false)

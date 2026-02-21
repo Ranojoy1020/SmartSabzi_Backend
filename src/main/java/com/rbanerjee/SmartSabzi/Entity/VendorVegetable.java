@@ -3,6 +3,7 @@ package com.rbanerjee.SmartSabzi.Entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.Instant;
@@ -39,6 +40,10 @@ public class VendorVegetable {
     @CreationTimestamp
     private Instant createdAt;
 
-    @OneToMany(mappedBy = "vendorVegetable", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column
+    @UpdateTimestamp
+    private Instant updatedAt;
+
+    @OneToMany(mappedBy = "vendorVegetable", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Price> priceList;
 }
