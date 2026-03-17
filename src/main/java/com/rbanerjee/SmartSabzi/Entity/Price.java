@@ -31,7 +31,7 @@ public class Price {
 
     @Column
     @NotNull
-    private Instant effectiveFrom;
+    private Instant effectiveFrom = Instant.now();
 
     @Column(updatable = false)
     @CreationTimestamp

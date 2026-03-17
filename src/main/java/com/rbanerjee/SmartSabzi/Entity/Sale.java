@@ -23,13 +23,13 @@ public class Sale {
     @JoinColumn(name = "vendor_id", nullable = false)
     private Vendor vendor;
 
-    @Column
+    @Column(nullable = false)
     private BigDecimal totalAmount;
+
+    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SaleItem> saleItemList;
 
     @Column(updatable = false)
     @CreationTimestamp
     private Instant createdAt;
-
-    @OneToMany(mappedBy = "sale")
-    private List<SaleItem> saleItemList;
 }

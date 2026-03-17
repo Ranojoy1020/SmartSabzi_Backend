@@ -26,7 +26,7 @@ public class SaleItem {
     private VendorVegetable vendorVegetable;
 
     @Column
-    private double weight;
+    private BigDecimal weight;
 
     @Column
     private BigDecimal unitPrice;

@@ -2,6 +2,7 @@ package com.rbanerjee.SmartSabzi.Controller;
 
 import com.rbanerjee.SmartSabzi.DTO.CurrentVendorProfile;
 import com.rbanerjee.SmartSabzi.DTO.NewCatalogResponse;
+import com.rbanerjee.SmartSabzi.DTO.VendorCatalogResponse;
 import com.rbanerjee.SmartSabzi.Entity.Vegetable;
 import com.rbanerjee.SmartSabzi.Entity.VendorVegetable;
 import com.rbanerjee.SmartSabzi.Service.VendorService;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RequestMapping("/vendor")
@@ -35,4 +37,15 @@ public class VendorController {
         return new ResponseEntity<>(newCatalogResponse, HttpStatusCode.valueOf(201));
     }
 
+    @GetMapping("/catalog")
+    public ResponseEntity<List<VendorCatalogResponse>> getCatalog(Authentication authentication){
+        List<VendorCatalogResponse> vendorCatalogResponseList = vendorService.vendorVegetableListCatalog(authentication.getName());
+        return new ResponseEntity<>(vendorCatalogResponseList, HttpStatusCode.valueOf(200));
+    }
+
+    @DeleteMapping("/catalog/{vendorVegetableId}")
+    public ResponseEntity<Object> deleteCatalogItem(@PathVariable UUID vendorVegetableId){
+        vendorService.deleteCatalogItem(vendorVegetableId);
+        return new ResponseEntity<>(HttpStatusCode.valueOf(204));
+    }
 }

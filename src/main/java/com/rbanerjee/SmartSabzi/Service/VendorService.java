@@ -1,6 +1,7 @@
 package com.rbanerjee.SmartSabzi.Service;
 
 import com.rbanerjee.SmartSabzi.DTO.CurrentVendorProfile;
+import com.rbanerjee.SmartSabzi.DTO.VendorCatalogResponse;
 import com.rbanerjee.SmartSabzi.Entity.Vegetable;
 import com.rbanerjee.SmartSabzi.Entity.Vendor;
 import com.rbanerjee.SmartSabzi.Entity.VendorVegetable;
@@ -10,7 +11,9 @@ import com.rbanerjee.SmartSabzi.Repository.VendorVegetableRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class VendorService {
@@ -51,5 +54,24 @@ public class VendorService {
         newVendorVegetable.setActive(true);
 
         return vendorVegetableRepository.save(newVendorVegetable);
+    }
+
+    public List<VendorCatalogResponse> vendorVegetableListCatalog(String email){
+        Vendor vendor = vendorRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Vendor Not Found"));
+
+        List<VendorVegetable> vendorVegetableList = vendorVegetableRepository.findAllByVendorEmail(email)
+                .orElseThrow(() -> new RuntimeException("Catalog Not Found"));
+
+        return vendorVegetableList.stream()
+                .map(VendorCatalogResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    public void deleteCatalogItem(UUID vendorVegetableId){
+        VendorVegetable vendorVegetable = vendorVegetableRepository.findById(vendorVegetableId)
+                .orElseThrow(() -> new RuntimeException("Catalog Item Not Found"));
+
+        vendorVegetableRepository.delete(vendorVegetable);
     }
 }
